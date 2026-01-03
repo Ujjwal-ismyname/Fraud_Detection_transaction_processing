@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-Time Fraud Detection</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 6px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        img { max-width: 650px; margin: 15px 0; display: block; }
+        h2, h3 { margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+<h2>Real-Time Fraud Detection System</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" required>
+    <button type="submit">Analyze</button>
+</form>
+
+{% if stats %}
+<h3>System Statistics</h3>
+<ul>
+    {% for k, v in stats.items() %}
+    <li><strong>{{ k }}:</strong> {{ v }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if eval_metrics %}
+<h3>Evaluation Metrics (Labeled Data Only)</h3>
+<ul>
+    {% for k, v in eval_metrics.items() %}
+    <li><strong>{{ k }}:</strong> {{ v }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if graph %}
+<h3>Fraud Probability Distribution (Uploaded Data)</h3>
+<img src="data:image/png;base64,{{ graph }}">
+{% endif %}
+
+{% if table %}
+<h3>Top High-Risk Transactions</h3>
+{{ table | safe }}
+{% endif %}
+
+{% if plots %}
+<hr>
+<h2>Model Evaluation (Training Phase)</h2>
+
+<h3>ROC Curve</h3>
+<img src="{{ url_for('static', filename='plots/roc_curve.png') }}">
+
+<h3>Precision-Recall Curve</h3>
+<img src="{{ url_for('static', filename='plots/precision_recall_curve.png') }}">
+
+<h3>Confusion Matrix</h3>
+<img src="{{ url_for('static', filename='plots/confusion_matrix.png') }}">
+
+<h3>Model Confidence Distribution</h3>
+<img src="{{ url_for('static', filename='plots/confidence_distribution.png') }}">
+
+<h3>Learning Curve (Validation AUC)</h3>
+<img src="{{ url_for('static', filename='plots/learning_curve_auc.png') }}">
+{% endif %}
+
+</body>
+</html>
